@@ -1,0 +1,14 @@
+- name: Install GPG key
+  apt_key:
+    url: https://packagecloud.io/slacktechnologies/slack/gpgkey
+    state: present
+
+- name: Install PPA
+  apt_repository:
+    repo: "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main"
+    state: present
+
+- name: Install apt package
+  apt:
+    name: slack-desktop
+    state: latest

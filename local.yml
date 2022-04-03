@@ -1,0 +1,46 @@
+- hosts: localhost
+  become: true
+
+  tasks:
+  - name: Install fcitx5, fcitx5-mozc, htop, neovim, peek, wireguard, zsh
+    apt:
+      name: 
+        - fcitx5
+        - fcitx5-mozc
+        - htop
+        - neovim
+        - peek
+        - wireguard
+        - zsh
+      install_recommends: yes
+      state: latest
+      update_cache: yes
+    tags: essentials
+
+  - name: Change shell to zsh
+    shell: chsh -s `which zsh`
+
+  # TODO: Rename file only if it exists
+  - name: Rename /etc/profile.d/pop-im-ibus.sh
+    shell: /bin/mv /etc/profile.d/pop-im-ibus.sh /etc/profile.d/pop-im-ibus.sh.bak
+    ignore_errors: yes
+
+  - name: Switch to fcitx5
+    command: im-config -n fcitx5
+
+  - include: tasks/chrome-vscode.yml
+    tags: chrome-vscode
+  - include: tasks/docker.yml
+    tags: docker
+  - include: tasks/gh.yml
+    tags: gh
+  - include: tasks/go.yml
+    tags: go
+  - include: tasks/oh-my-zsh.yml
+    tags: oh-my-zsh
+  - include: tasks/slack.yml
+    tags: slack
+  - include: tasks/terraform.yml
+    tags: terraform
+  - include: tasks/volta-node.yml
+    tags: volta-node

@@ -1,0 +1,56 @@
+- name: Get DEB architecture
+  shell: dpkg --print-architecture
+  register: deb_architecture
+
+- name: Go - Set Go variables
+  set_fact:
+    go_version: "1.18"
+    go_path: /usr/local/go/
+
+- name: Go - Check current go version.
+  command: "{{ go_path }}bin/go version"
+  register: go_current_version
+  changed_when: false
+  failed_when: false
+
+- name: Go - Delete current Go version if it's different.
+  file:
+    path: "{{ go_path }}"
+    state: absent
+  when: >
+    go_current_version.stdout is defined
+    and go_version not in go_current_version.stdout
+
+
+- name: Download Go Linux tarball
+  get_url:
+    url: "https://go.dev/dl/go{{ go_version }}.linux-{{ deb_architecture.stdout }}.tar.gz"
+    dest: "/tmp/go{{ go_version }}.linux-{{ deb_architecture.stdout }}.tar.gz"
+  when: >
+    go_current_version.stdout is not defined or (go_current_version.stdout is defined
+    and go_version not in go_current_version.stdout)
+
+- name: Create Go directory
+  file:
+    path: "{{ go_path }}"
+    state: directory
+  when: >
+    go_current_version.stdout is not defined or (go_current_version.stdout is defined
+    and go_version not in go_current_version.stdout)
+
+- name: Extract Go Linux x64 binary
+  unarchive:
+    src: "/tmp/go{{ go_version }}.linux-{{ deb_architecture.stdout }}.tar.gz"
+    dest: /usr/local
+  when: >
+    go_current_version.stdout is not defined or (go_current_version.stdout is defined
+    and go_version not in go_current_version.stdout)
+
+- name: Delete Go Linux tarball
+  file:
+    path: "/tmp/go{{ go_version }}.linux-{{ deb_architecture.stdout }}.tar.gz"
+    state: absent
+  when: >
+    go_current_version.stdout is not defined or (go_current_version.stdout is defined
+    and go_version not in go_current_version.stdout)
+

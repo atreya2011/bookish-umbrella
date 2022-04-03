@@ -1,0 +1,28 @@
+- name: Download oh-my-zsh install script
+  get_url:
+    url: https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp/oh-my-zsh-install.sh
+    mode: 0755
+  
+- name: Run oh-my-zsh install script
+  become: false
+  shell: /tmp/oh-my-zsh-install.sh
+
+- name: Remove oh-my-zsh install script
+  file:
+    path: /tmp/oh-my-zsh-install.sh
+    state: absent
+
+- name: Get the home directory of the user running the playbook
+  become: false
+  command: echo $HOME
+  register: home_dir
+
+- name: Install powerlevel10k.
+  git:
+    repo: "https://github.com/romkatv/powerlevel10k.git"
+    dest: "{{ home_dir.stdout }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    depth: '1'
+    update: no
+    version: 'master'
+  become: false

@@ -1,0 +1,23 @@
+- name: Download Volta setup script
+  get_url:
+    url: https://get.volta.sh
+    dest: /tmp/volta.sh
+    mode: 0755
+  
+- name: Run Volta setup script
+  become: false
+  shell: /tmp/volta.sh
+
+- name: Remove Volta setup script
+  file:
+    path: /tmp/volta.sh
+    state: absent
+
+- name: Get the home directory of the user running the playbook
+  become: false
+  command: echo $HOME
+  register: home_dir
+
+- name: Install Node using Volta
+  become: false
+  command: "{{ home_dir.stdout }}/.volta/bin/volta install node@latest"
