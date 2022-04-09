@@ -2,11 +2,12 @@
   become: true
 
   tasks:
-  - name: Install fcitx5, fcitx5-mozc, htop, neovim, peek, wireguard, zsh
+  - name: Install fcitx5, fcitx5-mozc, fonts-firacode, htop, neovim, peek, wireguard, zsh
     apt:
       name: 
         - fcitx5
         - fcitx5-mozc
+        - fonts-firacode
         - htop
         - neovim
         - peek
