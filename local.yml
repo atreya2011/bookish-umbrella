@@ -33,12 +33,18 @@
     tags: chrome-vscode
   - include: tasks/docker.yml
     tags: docker
+  - include: tasks/gcloudcli.yml
+    tags: gcloudcli
   - include: tasks/gh.yml
     tags: gh
   - include: tasks/go.yml
     tags: go
+  - include: tasks/kubectl.yml
+    tags: kubectl
   - include: tasks/oh-my-zsh.yml
     tags: oh-my-zsh
+  - include: tasks/screenrec.yml
+    tags: screenrec
   - include: tasks/slack.yml
     tags: slack
   - include: tasks/terraform.yml
