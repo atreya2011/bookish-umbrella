@@ -47,6 +47,8 @@
     tags: screenrec
   - include: tasks/slack.yml
     tags: slack
+  - include: tasks/tailscale.yml
+    tags: tailscale
   - include: tasks/terraform.yml
     tags: terraform
   - include: tasks/volta-node.yml
