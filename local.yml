@@ -20,14 +20,17 @@
 
   - name: Change shell to zsh
     shell: chsh -s `which zsh`
+    tags: essentials
 
   # TODO: Rename file only if it exists
   - name: Rename /etc/profile.d/pop-im-ibus.sh
     shell: /bin/mv /etc/profile.d/pop-im-ibus.sh /etc/profile.d/pop-im-ibus.sh.bak
     ignore_errors: yes
+    tags: essentials
 
   - name: Switch to fcitx5
     command: im-config -n fcitx5
+    tags: essentials
 
   - include: tasks/chrome-vscode.yml
     tags: chrome-vscode
