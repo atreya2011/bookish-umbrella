@@ -36,8 +36,8 @@
     tags: chrome-vscode
   - include: tasks/docker.yml
     tags: docker
-  - include: tasks/gcloudcli.yml
-    tags: gcloudcli
+  - include: tasks/google-cloud-cli.yml
+    tags: google-cloud-cli
   - include: tasks/gh.yml
     tags: gh
   - include: tasks/go.yml
