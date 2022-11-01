@@ -1,15 +1,14 @@
-- name: Get DEB architecture
-  shell: dpkg --print-architecture
-  register: deb_architecture
-
+# https://stackoverflow.com/questions/71585303/how-can-i-manage-keyring-files-in-trusted-gpg-d-with-ansible-playbook-since-apt/72548342#72548342
 - name: Install GPG key
-  apt_key:
-    url: https://apt.releases.hashicorp.com/gpg
-    state: present
+  get_url:
+    url:  https://apt.releases.hashicorp.com/gpg
+    dest: /etc/apt/keyrings/hashicorp-archive-keyring.asc
+    mode: '0644'
+    force: true
 
 - name: Install PPA
   apt_repository:
-    repo: "deb [arch={{ deb_architecture.stdout }}] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    repo: "deb [signed-by=/etc/apt/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     state: present
 
 - name: Install apt package
