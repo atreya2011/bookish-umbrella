@@ -1,15 +1,14 @@
-- name: Get DEB architecture
-  shell: dpkg --print-architecture
-  register: deb_architecture
-
+# https://stackoverflow.com/questions/71585303/how-can-i-manage-keyring-files-in-trusted-gpg-d-with-ansible-playbook-since-apt/72548342#72548342
 - name: Install GPG key
-  apt_key:
-    url: https://pkgs.tailscale.com/stable/ubuntu/focal.noarmor.gpg
-    state: present
+  get_url:
+    url: https://pkgs.tailscale.com/stable/ubuntu/{{ ansible_distribution_release }}.noarmor.gpg
+    dest: /etc/apt/keyrings/tailscale-archive-keyring.gpg
+    mode: '0644'
+    force: true
 
 - name: Install PPA
   apt_repository:
-    repo: "deb https://pkgs.tailscale.com/stable/ubuntu focal main"
+    repo: "deb [signed-by=/etc/apt/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release }} main"
     state: present
 
 - name: Install apt package
