@@ -44,6 +44,8 @@
     tags: go
   - include: tasks/kubectl.yml
     tags: kubectl
+  - include: tasks/ngrok.yml
+    tags: ngrok
   - include: tasks/oh-my-zsh.yml
     tags: oh-my-zsh
   - include: tasks/screenrec.yml
