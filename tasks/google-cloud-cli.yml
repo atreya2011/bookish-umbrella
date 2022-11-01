@@ -1,7 +1,4 @@
-- name: Get DEB architecture
-  shell: dpkg --print-architecture
-  register: deb_architecture
-
+# https://stackoverflow.com/questions/71585303/how-can-i-manage-keyring-files-in-trusted-gpg-d-with-ansible-playbook-since-apt/72548342#72548342
 - name: Install GPG key
   get_url:
     url:  https://packages.cloud.google.com/apt/doc/apt-key.gpg
