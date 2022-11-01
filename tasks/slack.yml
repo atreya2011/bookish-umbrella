@@ -1,11 +1,13 @@
 - name: Install GPG key
-  apt_key:
-    url: https://packagecloud.io/slacktechnologies/slack/gpgkey
-    state: present
+  get_url:
+    url:  https://packagecloud.io/slacktechnologies/slack/gpgkey
+    dest: /etc/apt/keyrings/slack.asc
+    mode: '0644'
+    force: true
 
 - name: Install PPA
   apt_repository:
-    repo: "deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main"
+    repo: "deb [signed-by=/etc/apt/keyrings/slack.asc] https://packagecloud.io/slacktechnologies/slack/debian/ jessie main"
     state: present
 
 - name: Install apt package
