@@ -2,15 +2,19 @@
   shell: dpkg --print-architecture
   register: deb_architecture
 
+# https://stackoverflow.com/questions/71585303/how-can-i-manage-keyring-files-in-trusted-gpg-d-with-ansible-playbook-since-apt/72548342#72548342
 - name: Install GPG key
-  apt_key:
+  get_url:
     url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
-    state: present
+    dest: /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    mode: '0644'
+    force: true
 
 - name: Install PPA
   apt_repository:
-    repo: "deb [arch={{ deb_architecture.stdout }}] https://cli.github.com/packages stable main"
+    repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
     state: present
+    filename: github-cli
 
 - name: Install apt package
   apt:
