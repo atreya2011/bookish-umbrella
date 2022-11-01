@@ -10,6 +10,7 @@
   apt_repository:
     repo: "deb [signed-by=/etc/apt/keyrings/slack.asc] https://packagecloud.io/slacktechnologies/slack/debian/ jessie main"
     state: present
+    filename: slack
 
 - name: Install apt package
   apt:

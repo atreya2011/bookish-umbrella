@@ -10,6 +10,7 @@
   apt_repository:
     repo: "deb [signed-by=/etc/apt/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release }} main"
     state: present
+    filename: tailscale
 
 - name: Install apt package
   apt:

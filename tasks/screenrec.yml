@@ -10,6 +10,7 @@
   apt_repository:
     repo: "deb [signed-by=/etc/apt/keyrings/screenrec.asc] https://screenrec.com/download/ubuntu stable main"
     state: present
+    filename: screenrec
 
 - name: Install apt package
   apt:
