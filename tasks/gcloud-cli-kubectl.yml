@@ -2,19 +2,21 @@
 - name: Install GPG key
   get_url:
     url:  https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    dest: /etc/apt/keyrings/cloud.google.gpg
+    dest: /etc/apt/keyrings/cloud.google.asc
     mode: '0644'
     force: true
 
 - name: Install PPA
   apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+    repo: "deb [signed-by=/etc/apt/keyrings/cloud.google.asc] https://packages.cloud.google.com/apt cloud-sdk main"
     state: present
     filename: google-cloud-sdk
 
 - name: Install apt package
   apt:
-    name: google-cloud-cli
+    name: 
+      - google-cloud-cli
+      - kubectl
     state: latest
     update_cache: yes
   # https://github.com/ansible/ansible/issues/51663#issuecomment-650562476

@@ -38,14 +38,12 @@
     tags: chrome-vscode
   - include: tasks/docker.yml
     tags: docker
-  - include: tasks/google-cloud-cli.yml
-    tags: google-cloud-cli
+  - include: tasks/gcloud-cli-kubectl.yml
+    tags: gcloud-cli-kubectl
   - include: tasks/gh.yml
     tags: gh
   - include: tasks/go.yml
     tags: go
-  - include: tasks/kubectl.yml
-    tags: kubectl
   - include: tasks/ngrok.yml
     tags: ngrok
   - include: tasks/oh-my-zsh.yml
