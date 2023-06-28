@@ -17,7 +17,6 @@
       - ca-certificates
       - curl
       - gnupg
-      - lsb-release
     state: latest
     update_cache: yes
   # https://github.com/ansible/ansible/issues/51663#issuecomment-650562476
@@ -34,14 +33,21 @@
   retries: 5
   delay: 5
 
+# https://stackoverflow.com/questions/71585303/how-can-i-manage-keyring-files-in-trusted-gpg-d-with-ansible-playbook-since-apt/72548342#72548342
 - name: Docker - Add Docker's official GPG Key
-  apt_key:
+  get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+    force: true
 
 - name: Docker - Setup Stable Repository
   apt_repository:
-    repo: "deb [arch={{ deb_architecture.stdout }}] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+  register: result
+  until: result is not failed
+  retries: 5
+  delay: 5
 
 - name: Docker - install Docker
   apt:
@@ -49,6 +55,8 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
     state: latest
     update_cache: yes
   # https://github.com/ansible/ansible/issues/51663#issuecomment-650562476
@@ -82,26 +90,16 @@
 
 - name: Set Docker Compose variables
   set_fact:
-    docker_compose_version: "1.29.2"
     docker_compose_path: /usr/local/bin/docker-compose
 
-- name: Docker - Check current docker-compose version.
-  command: docker-compose --version
-  register: docker_compose_current_version
-  changed_when: false
-  failed_when: false
-
-- name: Docker - Delete existing docker-compose version if it's different.
+- name: Docker - Delete existing Docker Compose Alias Script.
   file:
     path: "{{ docker_compose_path }}"
     state: absent
-  when: >
-    docker_compose_current_version.stdout is defined
-    and docker_compose_version not in docker_compose_current_version.stdout
 
-- name: Docker - Install Docker Compose (if configured).
-  get_url:
-    url: "https://github.com/docker/compose/releases/download/\
-          {{ docker_compose_version }}/docker-compose-{{ unames.stdout }}-{{ ansible_architecture }}"
+- name: Docker - Create Docker Compose Alias Script.
+  copy:
     dest: "{{ docker_compose_path }}"
+    content: 
+      docker compose --compatibility "$@"
     mode: 0755
