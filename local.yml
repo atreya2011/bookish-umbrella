@@ -32,6 +32,8 @@
     command: im-config -n fcitx5
     tags: essentials
 
+  - include: tasks/azure-cli.yml
+    tags: azure-cli
   - include: tasks/chrome-vscode.yml
     tags: chrome-vscode
   - include: tasks/docker.yml
