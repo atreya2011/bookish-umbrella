@@ -4,7 +4,7 @@
 
 - name: Go - Set Go variables
   set_fact:
-    go_version: "1.20.5"
+    go_version: "1.24.2"
     go_path: /usr/local/go/
 
 - name: Go - Check current go version.
